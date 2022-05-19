@@ -1,6 +1,7 @@
 const { response } = require('express');
 
-const usuariosGet = (req, res = response) => {
+const usuariosGet = (req , res = response) => {
+
     res.json({
         message: 'get API - controlador'
     })

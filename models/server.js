@@ -33,7 +33,7 @@ class Server {
     }
     listen(){
         this.app.listen(this.port, () => {
-            console.log(`Servidor escuchando el puerto ${process.env.PORT}!`)
+            console.log(`Servidor escuchando el puerto: ${this.port}!`)
         });
     }
 }
