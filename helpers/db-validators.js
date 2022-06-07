@@ -17,18 +17,19 @@ const existeCorreo = async(correo = '') => {
         throw new Error(`El correo:  ${correo} ya existe`);
     }
 }
-// const existeCorreo = await Usuario.findOne({correo});
-// if(existeCorreo){
-//     return res.status(400).json({
-//         ok: false,
-//         msg: 'El correo ya existe'
-//     });
-// }
+//verificar si el id es valido y existe
+const existeUsuarioPorId = async(id = '') => {
+    const existeID = await Usuario.findById(id);
+    if(!existeID) {
+        throw new Error(`El id:  ${id} no existe`);
+    }
+}
 
 
 
 module.exports = {
     esRoleValido,
-    existeCorreo
+    existeCorreo,
+    existeUsuarioPorId
 }
 

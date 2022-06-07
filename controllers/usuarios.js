@@ -5,10 +5,20 @@ const Usuario = require('../models/usuario');
 const bcryptjs = require('bcryptjs');
 
 
-const usuariosGet = (req , res = response) => {
+const usuariosGet = async(req , res = response) => {
+    
+    const { limite = 5, desde = 0} = req.query;
+    const query = { estado: true };
+
+    const [ total, usuarios ] = await Promise.all([
+        Usuario.countDocuments(query),
+        Usuario.find(query).limit(Number(limite)).skip(Number(desde))
+    ]);
 
     res.json({
-        message: 'get API - controlador'
+        message: 'get API - controlador',
+        total,
+        usuarios
     })
 }
 const usuariosPost = async(req, res = response) => {
@@ -36,7 +46,7 @@ const usuariosPatch = (req, res = response) => {
 }
 const usuariosPut = async(req, res = response) => {
     const {id} = req.params;
-    const {password, google, correo, ...resto} = req.body;
+    const {_id, password, google, correo, ...resto} = req.body;
 
     // TODO validar contra base de datos
     if(password){
@@ -45,15 +55,18 @@ const usuariosPut = async(req, res = response) => {
     }
     const  usuario = await Usuario.findByIdAndUpdate(id, resto);
 
-    res.json({
-        message: 'put API - controlador',
-        usuario
-    })
+    res.json(usuario)
 }
-const usuariosDelete = (req, res = response) => {
-    res.json({
-        message: 'delete API - controlador'
-    })
+const usuariosDelete = async(req, res = response) => {
+    const {id} = req.params;
+
+    // borrar fisicamente
+    // const usuario = await Usuario.findByIdAndDelete(id);
+
+    // borrar logicamente
+    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false});
+
+    res.json(usuario)
 }
 
 module.exports = {
