@@ -4,9 +4,51 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso denegado</title>
+    <title>Google Sing In</title>
 </head>
 <body>
-    <h1>Acceso denegado! xd</h1>
+    <h1>Google Sing In</h1>
+    <hr>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+
+
+    <script>
+        // console.log(window.location.hostname.includes('localhost'))
+        let url = window.location.hostname.includes('localhost') 
+        ? 'http://localhost:8080/api/auth/google' 
+        : 'https://nodecrudlearning.herokuapp.com/api/auth/google';
+
+        function handleCredentialResponse(response) {
+          console.log("Encoded JWT ID token: " + response.credential);
+
+          var id_token = response.credential;
+          const data = { id_token };
+
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({'id_token':data.id_token})
+          })
+          .then(response => response.json())
+            .then(data => { console.log('Exitoso! ', data) })
+            .catch( console.log );
+        }
+        window.onload = function () {
+          google.accounts.id.initialize({
+            client_id: "87918619862-qffecbf142fml2oco5kdtjatpk6db07q.apps.googleusercontent.com",
+            callback: handleCredentialResponse
+          });
+          google.accounts.id.renderButton(
+            document.getElementById("buttonDiv"),
+            { theme: "outline", size: "large" }  // customization attributes
+          );
+          google.accounts.id.prompt(); // also display the One Tap dialog
+        }
+    </script>
+    <div id="buttonDiv"></div> 
+
 </body>
 </html>
