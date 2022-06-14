@@ -1,9 +1,9 @@
 const { response } = require("express");
-
+const path = require("path");
 
 
 const Home = function(req, res = response) {
-    res.send("Hello World!");
+    res.sendFile(path.join(__dirname, "../public/home.html"));
 }
 
 

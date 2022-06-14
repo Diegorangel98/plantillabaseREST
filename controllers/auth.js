@@ -1,16 +1,21 @@
 const { response } = require("express");
 const bcrypt = require("bcryptjs");
+const bodyParser = require("body-parser");
 
 const Usuario = require("../models/usuario");
 const { generarJWT } = require("../helpers/generar-jwt");
 const { googleVerify } = require("../helpers/google-verify");
 
 
-const login = async(req, res = response) => {
+const login = (req, res = response) => {
+    res.json({
+        ok: true,
+        message: "Login correcto"
+    });
+    
+    // const { correo, password } = req.body;
 
-    const { correo, password } = req.body;
-
-    try {
+    /* try {
         // verificar si el email existe
         const usuario = await Usuario.findOne({ correo });
         if (!usuario) {
@@ -45,7 +50,7 @@ const login = async(req, res = response) => {
         return res.status(500).json({
             message: "hable con el administrador"
         });
-    }
+    } */
 }
 const googleSignin = async(req, res = response) => {
     const { id_token } = req.body;
